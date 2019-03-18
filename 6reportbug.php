@@ -2,43 +2,46 @@
 <html>
     <head>
     
+	
 
     <!-- <link href="csspage.css" rel="StyleSheet" type="text/css"> -->
     </head>
     <body>
         <?php
 
-            $connection=mysqli('localhost','root','aressam1999');
+            $connection=mysqli_connect ('localhost','root','aressam1999');
             mysqli_select_db($connection,"bugtracker") or die("2");
 
 
             
             $query1="SELECT * FROM project WHERE status='y'";
-            ResultSet obj3=obj2.executeQuery(q);
+            $result1=mysqli_query($connection,$query1) or die(mysqli_error);
             
-            Statement obj4=obj1.createStatement();
-            String q2="SELECT * FROM empreg";
-            ResultSet obj5=obj4.executeQuery(q2);
+
+            $query2="SELECT * FROM empreg";
+            $result2=mysqli_query($connection,$query2) or die(mysqli_error);
             
-            Statement obj6=obj1.createStatement();
-            String q3="SELECT * FROM empreg";
-            ResultSet obj7=obj6.executeQuery(q3);
+
+            $query3="SELECT * FROM empreg";
+            $result3=mysqli_query($connection,$query3) or die(mysqli_error);
+            
         ?>
         <h1 align="center">Report a bug:</h1>
-        <form name=f1 onsubmit="return valid()" action="reportbugINS.jsp" method="post">
-            <table class="table2">
+        <form action="reportbugINS.php" method="post">
+            <table>
                 <tr>
                     <td>Project : </td>
                     <td>
                         <select name=project>
                             <option value="sel">sel</option>
-                            <%while(obj3.next())
+                            <?php 
+                            while($row=mysqli_fetch_array($result1))
                             {
-                            %>
-                            <option value="<%=obj3.getString("pid")%>"><%=obj3.getString("proname")%></option>
-                            <%
+                            ?>
+                            <option value="<?=$row['pid']?>"><?=$row['proname']?></option>
+                            <?php
                             }
-                            %>
+                            ?>
                         </select>
                     </td>
                 </tr>
@@ -64,13 +67,14 @@
                     <td>
                         <select name=assign>
                             <option value="sel">sel</option>
-                            <%while(obj5.next())
+                            <?php 
+                            while($row=mysqli_fetch_array($result2))
                             {
-                            %>
-                            <option value="<%=obj5.getString("eid")%>"><%=obj5.getString("name")%></option>
-                            <%
+                            ?>
+                            <option value="<?=$row['eid']?>"><?=$row['name']?></option>
+                            <?php
                             }
-                            %>
+                            ?>
                         </select>
                     </td>
                 </tr>
@@ -88,10 +92,10 @@
                 </tr>
                 <tr>
                     <td></td>
-                    <td><input type="hidden" value="<%=session.getAttribute("user")%>" name=hid><input type="submit" value="Report"></td>
+                    <td><input type="hidden" value="<?=$_SESSION['user']?>" name=hid><input type="submit" value="Report"></td>
                 </tr>
                 <tr>
-                    <td><a href="emphome.jsp">Back</a></td>
+                    <td><a href="emphome.php">Back</a></td>
                 </tr>
             </table>
         </form>
